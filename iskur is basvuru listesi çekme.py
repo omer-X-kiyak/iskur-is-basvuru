@@ -47,7 +47,7 @@ def get_applications(browser):
     sheet = workbook.active
 
     # Başlık satırını doldur
-    table_headers = ["No", "İşveren", "Pozisyon (Meslek)", "Çalışma Yeri", "Başvuru/Seçme Tarihi", "Durumu", "Statüsü", "Başvuru/İptal"]
+    table_headers = ["Davet Mektubu", "No", "İşveren", "Pozisyon (Meslek)", "Çalışma Yeri", "Başvuru/Seçme Tarihi", "Durumu", "Statüsü", "Başvuru/İptal"]
     sheet.append(table_headers)
 
     # Verileri tabloya ekle
@@ -56,6 +56,7 @@ def get_applications(browser):
 
     while retries < max_retries:
         try:
+            Davet_Mektubu = browser.find_elements(By.XPATH, '//*[@id="ctl02_ctlGridBasvurular"]/tbody/tr/td[4]')
             No_hucreler = browser.find_elements(By.XPATH, '//*[@id="ctl02_ctlGridBasvurular"]/tbody/tr/td[2]')
             isveren_hucreler = browser.find_elements(By.XPATH, '//*[@id="ctl02_ctlGridBasvurular"]/tbody/tr/td[6]')
             Pozisyon_meslek_hucreler = browser.find_elements(By.XPATH, '//*[@id="ctl02_ctlGridBasvurular"]/tbody/tr/td[7]')
@@ -66,6 +67,8 @@ def get_applications(browser):
             basvuru_iptal_hucreler = browser.find_elements(By.XPATH, '//*[@id="ctl02_ctlGridBasvurular"]/tbody/tr/td[12]')
 
             for i in range(len(No_hucreler)):
+                Davet_text = Davet_Mektubu[i].text
+                Davet_text = "Başvurunuz onaylandı"
                 No_text = No_hucreler[i].text
                 isveren_text = isveren_hucreler[i].text
                 Pozisyon_meslek_text = Pozisyon_meslek_hucreler[i].text
@@ -75,7 +78,7 @@ def get_applications(browser):
                 statu_text = statu_hucreler[i].text
                 basvuru_iptal_text = basvuru_iptal_hucreler[i].text
 
-                sheet.append([No_text, isveren_text, Pozisyon_meslek_text, calisma_yeri_text, basvuru_tarihi_text, durumu_text, statu_text, basvuru_iptal_text])
+                sheet.append([Davet_text, No_text, isveren_text, Pozisyon_meslek_text, calisma_yeri_text, basvuru_tarihi_text, durumu_text, statu_text, basvuru_iptal_text])
 
             # Veriler başarıyla çekildi, döngüyü sonlandır
             break
